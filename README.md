@@ -1,10 +1,16 @@
-# Multi-Lingo Tamazight Edition - Emergency Communication AI Translation App
+# Multi-Lingo App - Tamazight Edition
+
+![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
+
+![App Screenshot 1](assets/images/image-2-v3.6-Tamazight_MultiLingo_App-main-web.png)
+
+![App Screenshot 2](assets/images/image-3-v3.6-Tamazight_MultiLingo_App-main-web.png)
 
 ## 🏆 Kaggle Google Deep Mind Hackathon Entry
 
 **Competition**: [Kaggle Google Deep Mind Hackathon](https://www.kaggle.com/competitions/google-gemma-3n-hackathon)
-**Deadline**: 5 days remaining (August 5, 2025)
-**Model**: Gemma-3n 4b parameter fine-tuned for Tamazight translation
+**Deadline**: (August 6, 2025)
+**Model**: Gemma-3n 2b parameter fine-tuned for Tamazight translation
 
 ### 🌍 Mission: Bridging Communication Gaps in Crisis
 
