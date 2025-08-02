@@ -2,8 +2,6 @@
 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 
-![App Screenshot 1](assets/images/image-2-v3.6-Tamazight_MultiLingo_App-main-web.png)
-
 ![App Screenshot 2](assets/images/image-3-v3.6-Tamazight_MultiLingo_App-main-web.png)
 
 ## 🏆 Kaggle Google Deep Mind Hackathon Entry
