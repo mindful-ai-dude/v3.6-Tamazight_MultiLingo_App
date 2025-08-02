@@ -1,4 +1,5 @@
 # Multi-Lingo App - Tamazight Edition 
+![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 
 - Bridging languages, preserving culture, empowering emergency communication.
 
@@ -33,7 +34,6 @@ A beautiful, production-ready mobile translation app built with Expo and React N
 
 - **Unsloth (Discord) Team and Dev Friends**: For their incredible support and guidance.
 
-![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 ## 🏆 Kaggle Google Deep Mind Hackathon
 
 ### **Competition Details**
