@@ -18,6 +18,7 @@ export default function TabLayout() {
           backgroundColor: 'transparent',
           borderTopWidth: 0,
           elevation: 0,
+          paddingBottom: 0,
         },
         tabBarBackground: () => (
           <View style={StyleSheet.absoluteFillObject}>

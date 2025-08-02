@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { GradientBackground } from '@/components/GradientBackground';
 import { GlassCard } from '@/components/GlassCard';
-import { Search, Star, Trash2, ArrowUpDown } from 'lucide-react-native';
+import { Search, Star, Trash2, ArrowUpDown, Users, Database } from 'lucide-react-native';
+import ConvexTranslationHistory from '@/components/ConvexTranslationHistory';
 
 interface TranslationItem {
   id: string;
@@ -48,6 +49,7 @@ export default function HistoryScreen() {
   const [searchText, setSearchText] = useState('');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [history, setHistory] = useState(SAMPLE_HISTORY);
+  const [activeTab, setActiveTab] = useState<'local' | 'community'>('community');
 
   const filteredHistory = history.filter(item => {
     const matchesSearch = searchText === '' || 
@@ -82,6 +84,29 @@ export default function HistoryScreen() {
             <Text style={styles.subtitle}>Your saved translations</Text>
           </View>
 
+          {/* Tab Switcher */}
+          <View style={styles.tabContainer}>
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'community' && styles.activeTab]}
+              onPress={() => setActiveTab('community')}
+            >
+              <Users size={16} color={activeTab === 'community' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)'} />
+              <Text style={[styles.tabText, activeTab === 'community' && styles.activeTabText]}>
+                Community
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.tab, activeTab === 'local' && styles.activeTab]}
+              onPress={() => setActiveTab('local')}
+            >
+              <Database size={16} color={activeTab === 'local' ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)'} />
+              <Text style={[styles.tabText, activeTab === 'local' && styles.activeTabText]}>
+                Local
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <GlassCard style={styles.searchCard}>
             <View style={styles.searchContainer}>
               <Search size={20} color="rgba(255, 255, 255, 0.7)" strokeWidth={2} />
@@ -95,16 +120,20 @@ export default function HistoryScreen() {
             </TouchableOpacity>
           </GlassCard>
 
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-            {filteredHistory.length === 0 ? (
-              <GlassCard style={styles.emptyCard}>
-                <Text style={styles.emptyText}>No translations found</Text>
-                <Text style={styles.emptySubtext}>
-                  {showFavoritesOnly ? 'No favorite translations yet' : 'Start translating to build your history'}
-                </Text>
-              </GlassCard>
-            ) : (
-              filteredHistory.map((item) => (
+          {/* Content based on active tab */}
+          {activeTab === 'community' ? (
+            <ConvexTranslationHistory limit={50} />
+          ) : (
+            <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+              {filteredHistory.length === 0 ? (
+                <GlassCard style={styles.emptyCard}>
+                  <Text style={styles.emptyText}>No translations found</Text>
+                  <Text style={styles.emptySubtext}>
+                    {showFavoritesOnly ? 'No favorite translations yet' : 'Start translating to build your history'}
+                  </Text>
+                </GlassCard>
+              ) : (
+                filteredHistory.map((item) => (
                 <GlassCard key={item.id} style={styles.historyItem}>
                   <View style={styles.itemHeader}>
                     <View style={styles.languageInfo}>
@@ -143,9 +172,10 @@ export default function HistoryScreen() {
                   
                   <Text style={styles.timestamp}>{formatTimestamp(item.timestamp)}</Text>
                 </GlassCard>
-              ))
-            )}
-          </ScrollView>
+                ))
+              )}
+            </ScrollView>
+          )}
         </SafeAreaView>
       </GradientBackground>
     </View>
@@ -176,6 +206,35 @@ const styles = StyleSheet.create({
     fontFamily: 'Inter-Regular',
     color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 8,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    marginTop: 16,
+    marginBottom: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 12,
+    padding: 4,
+  },
+  tab: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    borderRadius: 8,
+    gap: 8,
+  },
+  activeTab: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  tabText: {
+    color: 'rgba(255, 255, 255, 0.6)',
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
+  },
+  activeTabText: {
+    color: '#FFFFFF',
   },
   searchCard: {
     marginHorizontal: 20,
@@ -209,6 +268,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 105, // Account for tab bar height (85px) + extra padding
   },
   historyItem: {
     marginBottom: 16,

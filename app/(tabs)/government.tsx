@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     paddingHorizontal: 20,
+    paddingBottom: 105, // Account for tab bar height (85px) + extra padding
   },
   phraseButton: {
     marginBottom: 16,

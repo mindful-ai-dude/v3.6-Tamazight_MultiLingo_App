@@ -7,6 +7,11 @@ import { TifinghKeyboard } from '@/components/TifinghKeyboard';
 import { GlassCard } from '@/components/GlassCard';
 import { Keyboard, Zap, Camera, Wifi, WifiOff, Cloud, Cpu } from 'lucide-react-native';
 import { useMode } from '../context/ModeContext';
+import { geminiService } from '@/services/geminiService';
+import { offlineAIService } from '@/services/offlineAIService';
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { useConvexTranslation } from '@/services/convexTranslationService';
 
 export default function TranslateScreen() {
   const [inputText, setInputText] = useState('');
@@ -17,6 +22,26 @@ export default function TranslateScreen() {
   const [isTranslating, setIsTranslating] = useState(false);
   const { mode } = useMode();
 
+  // Test Convex connection
+  const convexTest = useQuery(api.test.hello);
+  const emergencyStatus = useQuery(api.test.emergencyStatus);
+
+  // Enhanced Convex translation service
+  const {
+    translateWithCollaboration,
+    recentTranslations,
+    isConnected
+  } = useConvexTranslation();
+
+  // Helper function to convert display language to API format
+  const getLanguageCode = (displayLanguage: string): string => {
+    if (displayLanguage.includes('Tamazight')) return 'tamazight';
+    if (displayLanguage.includes('Arabic')) return 'arabic';
+    if (displayLanguage.includes('French')) return 'french';
+    if (displayLanguage.includes('English')) return 'english';
+    return 'english'; // fallback
+  };
+
   const handleSwapLanguages = () => {
     setFromLanguage(toLanguage);
     setToLanguage(fromLanguage);
@@ -26,45 +51,92 @@ export default function TranslateScreen() {
 
   const handleTranslate = async () => {
     if (!inputText.trim()) return;
-    
+
     setIsTranslating(true);
 
-    if (mode === 'online') {
-      // Online translation using Gemma-3 API
-      try {
-        // Simulate API call with realistic delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        // Mock translation - replace with actual API call
-        if (fromLanguage === 'English' && toLanguage.includes('Tamazight')) {
-          setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-        } else if (fromLanguage.includes('Tamazight') && toLanguage === 'English') {
-          setOutputText('Hello, peace be with you');
-        } else if (fromLanguage.includes('Arabic') && toLanguage.includes('Tamazight')) {
-          setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-        } else {
-          setOutputText(`[Online Translation from ${fromLanguage} to ${toLanguage}]: ${inputText}`);
+    try {
+      const fromLangCode = getLanguageCode(fromLanguage);
+      const toLangCode = getLanguageCode(toLanguage);
+
+      // Use enhanced Convex translation service for collaborative features
+      const result = await translateWithCollaboration(
+        inputText,
+        fromLangCode,
+        toLangCode,
+        'general', // context
+        'user-' + Date.now() // userId (in real app, use actual user ID)
+      );
+
+      setOutputText(result.translatedText);
+
+      // Show translation method info in console
+      const methodInfo = result.method === 'community' ?
+        '✅ Community Verified' :
+        result.method === 'gemini' ?
+        '🤖 Gemini AI' :
+        result.method === 'tflite' ?
+        '📱 Offline AI' :
+        '💾 Cached';
+
+      console.log(`Translation: ${methodInfo} (${Math.round((result.confidence || 0) * 100)}% confidence)`);
+
+    } catch (error) {
+      console.error('Enhanced translation failed, using fallback:', error);
+
+      // Fallback to original translation methods
+      if (mode === 'online') {
+        try {
+          if (!geminiService.isConfigured()) {
+            setOutputText('Please configure your Gemini API key in the .env file to use online translation.');
+            setIsTranslating(false);
+            return;
+          }
+
+          const fromLangCode = getLanguageCode(fromLanguage);
+          const toLangCode = getLanguageCode(toLanguage);
+
+          const translation = await geminiService.translateText(
+            inputText,
+            fromLangCode,
+            toLangCode,
+            'general'
+          );
+
+          setOutputText(translation);
+        } catch (geminiError) {
+          console.error('Gemini API Translation Error:', geminiError);
+          setOutputText('Error translating online. Please check your internet connection and API key, then try again.');
         }
-      } catch (error) {
-        console.error('API Translation Error:', error);
-        setOutputText('Error translating online. Please check your connection and try again.');
-      } finally {
-        setIsTranslating(false);
+      } else {
+        try {
+          if (!offlineAIService.isReady()) {
+            await offlineAIService.initialize();
+          }
+
+          const result = await offlineAIService.translateText(
+            inputText,
+            fromLanguage,
+            toLanguage,
+            'general'
+          );
+
+          setOutputText(result.translatedText);
+        } catch (offlineError) {
+          console.error('Offline AI Translation Error:', offlineError);
+          // Fallback to simple mock translation
+          if (fromLanguage === 'English' && toLanguage.includes('Tamazight')) {
+            setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
+          } else if (fromLanguage.includes('Tamazight') && toLanguage === 'English') {
+            setOutputText('Hello, peace be with you');
+          } else if (fromLanguage.includes('Arabic') && toLanguage.includes('Tamazight')) {
+            setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
+          } else {
+            setOutputText(`[Offline Translation from ${fromLanguage} to ${toLanguage}]: ${inputText}`);
+          }
+        }
       }
-    } else {
-      // Offline translation (existing simulation)
-      setTimeout(() => {
-        if (fromLanguage === 'English' && toLanguage.includes('Tamazight')) {
-          setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-        } else if (fromLanguage.includes('Tamazight') && toLanguage === 'English') {
-          setOutputText('Hello, peace be with you');
-        } else if (fromLanguage.includes('Arabic') && toLanguage.includes('Tamazight')) {
-          setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-        } else {
-          setOutputText(`[Offline Translation from ${fromLanguage} to ${toLanguage}]: ${inputText}`);
-        }
-        setIsTranslating(false);
-      }, 1200);
+    } finally {
+      setIsTranslating(false);
     }
   };
 
@@ -98,6 +170,20 @@ export default function TranslateScreen() {
                   <WifiOff size={14} color="rgba(255, 255, 255, 0.6)" strokeWidth={2} />
                 )}
               </View>
+
+              {/* Convex Connection Status */}
+              {convexTest && (
+                <View style={styles.convexStatus}>
+                  <Text style={styles.convexText}>
+                    🚀 Real-time DB Connected
+                  </Text>
+                  {recentTranslations && (
+                    <Text style={styles.convexSubtext}>
+                      {recentTranslations.length} community translations available
+                    </Text>
+                  )}
+                </View>
+              )}
             </View>
 
             <LanguageSelector
@@ -194,6 +280,7 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
     padding: 20,
+    paddingBottom: 105, // Account for tab bar height (85px) + extra padding
   },
   header: {
     alignItems: 'center',
@@ -281,5 +368,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Inter-Regular',
     flex: 1,
+  },
+  convexStatus: {
+    marginTop: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderRadius: 12,
+    alignSelf: 'center',
+  },
+  convexText: {
+    color: '#10B981',
+    fontSize: 12,
+    fontFamily: 'Inter-Medium',
+  },
+  convexSubtext: {
+    color: 'rgba(16, 185, 129, 0.8)',
+    fontSize: 10,
+    fontFamily: 'Inter-Regular',
+    marginTop: 2,
   },
 });

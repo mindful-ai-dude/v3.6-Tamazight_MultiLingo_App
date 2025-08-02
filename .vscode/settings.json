@@ -1,0 +1,58 @@
+{
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.configuration.detectJavaRuntime": false,
+  "java.import.exclusions": [
+    "**/android/**",
+    "**/node_modules/**",
+    "**/ios/**"
+  ],
+  "java.configuration.workspaceCacheLimit": 90,
+  "java.jdt.ls.java.home": null,
+  "java.server.launchMode": "Standard",
+  "java.eclipse.downloadSources": false,
+  "java.maven.downloadSources": false,
+  "java.gradle.downloadSources": false,
+  "files.exclude": {
+    "**/.expo": true,
+    "**/.expo-shared": true,
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.expo": true,
+    "**/.expo-shared": true,
+    "**/ios/build": true,
+    "**/android/build": true,
+    "**/android/.gradle": true
+  },
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.autoImports": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.workingDirectories": ["."],
+  "emmet.includeLanguages": {
+    "typescript": "typescriptreact",
+    "javascript": "javascriptreact"
+  },
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+    paddingBottom: 105, // Account for tab bar height (85px) + extra padding
   },
   header: {
     alignItems: 'center',
