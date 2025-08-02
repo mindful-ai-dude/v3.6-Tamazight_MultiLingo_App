@@ -1,20 +1,48 @@
 # Multi-Lingo App - Tamazight Edition
 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
+## 🏆 Kaggle Google Deep Mind Hackathon
+
+### **Competition Details**
+- **Event**: [Kaggle Google Deep Mind Hackathon](https://www.kaggle.com/competitions/google-gemma-3n-hackathon)
+- **Timeline**: July 2025 - August 6, 2025
+- **Model**: Gemma-3n 2b parameter model (released June 2025)
+- **Focus**: Humanitarian AI applications using Google's latest Gemma-3n 2b parameter model (offline use) and Gemma-3 12b API (online use) for humanitarian applications of large language models
+
+### **Technical Achievements**
+- **Fine-tuning Dataset**: 100,000+ Arabic, English, French, and Tifinagh language pairs
+- **Model Conversion**: Gemma-3n 4b → TensorFlow Lite for mobile deployment
+- **Dual Architecture**: Online API + Offline on-device inference
+- **Emergency Optimization**: Specialized training for crisis communication scenarios
+- **Cultural Accuracy**: Moroccan Berber linguistic expertise integration
 
 ![App Screenshot 2](assets/images/image-3-v3.6-Tamazight_MultiLingo_App-main-web.png)
 
-## 🏆 Kaggle Google Deep Mind Hackathon Entry
+### **Innovation Highlights**
+- **First Tamazight AI**: Pioneering AI translation for indigenous Berber languages
+- **Emergency-First Design**: Prioritizes humanitarian use cases over general translation
+- **Constitutional Compliance**: Supports Morocco's official language recognition
+- **Offline Reliability**: Critical for disaster scenarios with damaged infrastructure
+- **Cultural Preservation**: Promotes endangered language through modern technology
 
-**Competition**: [Kaggle Google Deep Mind Hackathon](https://www.kaggle.com/competitions/google-gemma-3n-hackathon)
-**Deadline**: (August 6, 2025)
-**Model**: Gemma-3n 2b parameter fine-tuned for Tamazight translation
+### **Impact Metrics**
+- **Target Users**: Emergency responders, Berber communities, government officials
+- **Use Cases**: Earthquake relief, medical emergencies, legal proceedings
+- **Languages Preserved**: Tamazight variants (Tachelhit, Tarifit, Central Atlas)
+- **Emergency Phrases**: 50+ critical communication phrases pre-loaded
 
 ### 🌍 Mission: Bridging Communication Gaps in Crisis
 
 This app addresses a critical humanitarian need identified during the devastating 2023 Morocco earthquake, where rescue workers and officials struggled to communicate effectively with Moroccan Berber communities. Our solution provides instant, offline AI-powered translation to ensure no one is left behind during emergencies.
 
 A beautiful, production-ready mobile translation app built with Expo and React Native, featuring offline AI translation capabilities for Tamazight (ⵜⴰⵎⴰⵣⵉⵖⵜ), pronounced "Tamazirt", the indigenous Berber language of Morocco. The app provides seamless multidirectional translation between Tamazight, Arabic, French, and English with specialized features for emergency situations and government/parliamentary use.
+
+## 🙏 Acknowledgments
+
+### **Humanitarian Mission**
+- **2023 Morocco Earthquake Victims**: This app honors those affected and aims to prevent future communication barriers
+- **Moroccan Berber Communities**: For preserving Tamazight language and culture through centuries
+- **Emergency Responders**: Who inspired this solution through their dedication during the crisis
 
 ## 🌟 Features
 
@@ -344,34 +372,6 @@ eas build:configure
 eas build --platform all
 ```
 
-## 🏆 Kaggle Google Deep Mind Hackathon
-
-### **Competition Details**
-- **Event**: [Kaggle Google Deep Mind Hackathon](https://www.kaggle.com/competitions/google-gemma-3n-hackathon)
-- **Timeline**: July 2025 (5 days remaining as of July 31, 2025)
-- **Model**: Gemma-3n 4b parameter model (released June 2025)
-- **Focus**: Humanitarian AI applications using Google's latest language models
-
-### **Technical Achievements**
-- **Fine-tuning Dataset**: 100,000+ Arabic, English, French, and Tifinagh language pairs
-- **Model Conversion**: Gemma-3n 4b → TensorFlow Lite for mobile deployment
-- **Dual Architecture**: Online API + Offline on-device inference
-- **Emergency Optimization**: Specialized training for crisis communication scenarios
-- **Cultural Accuracy**: Moroccan Berber linguistic expertise integration
-
-### **Innovation Highlights**
-- **First Tamazight AI**: Pioneering AI translation for indigenous Berber languages
-- **Emergency-First Design**: Prioritizes humanitarian use cases over general translation
-- **Constitutional Compliance**: Supports Morocco's official language recognition
-- **Offline Reliability**: Critical for disaster scenarios with damaged infrastructure
-- **Cultural Preservation**: Promotes endangered language through modern technology
-
-### **Impact Metrics**
-- **Target Users**: Emergency responders, Berber communities, government officials
-- **Use Cases**: Earthquake relief, medical emergencies, legal proceedings
-- **Languages Preserved**: Tamazight variants (Tachelhit, Tarifit, Central Atlas)
-- **Emergency Phrases**: 50+ critical communication phrases pre-loaded
-
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -383,13 +383,6 @@ eas build --platform all
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-### **Humanitarian Mission**
-- **2023 Morocco Earthquake Victims**: This app honors those affected and aims to prevent future communication barriers
-- **Moroccan Berber Communities**: For preserving Tamazight language and culture through centuries
-- **Emergency Responders**: Who inspired this solution through their dedication during the crisis
 
 ### **Technical Partners**
 - **Google DeepMind**: For the Gemma-3n model and Kaggle hackathon opportunity
