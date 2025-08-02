@@ -1,7 +1,7 @@
 # Multi-Lingo App - Tamazight Edition 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 
-- Bridging languages, preserving culture, empowering emergency communication.
+## Bridging languages, preserving culture, empowering emergency communication.
 
 *"In crisis, every word matters. In preservation, every language counts."*
 
@@ -75,7 +75,7 @@ A beautiful, production-ready mobile translation app built with Expo and React N
 - **Dual-Mode Translation**:
   - **Online**: Latest Gemma-3 12b API for highest accuracy
   - **Offline**: Fine-tuned Gemma-3n 2b on-device model for privacy and reliability
-- **Multidirectional Translation**: Any language to any language support
+- **Multidirectional Translation**: Arabic ↔ Tamazight, French ↔ Tamazight, English ↔ Tamazight
 - **Context-Aware**: Emergency, government, and general contexts with specialized terminology
 - **Cultural Accuracy**: Fine-tuned on 100,000+ Moroccan language pairs
 
@@ -88,7 +88,7 @@ A beautiful, production-ready mobile translation app built with Expo and React N
 ### 📱 User Experience
 - **Beautiful Glass-morphism UI**: Modern, elegant interface with gradient backgrounds
 - **Voice Integration**: Speech-to-text input and text-to-speech output with native audio
-- **Translation History**: SQLite database with favorites and search functionality
+- **Translation History**: offline on-devive SQLite database (online convex real-time database) with favorites and search functionality
 - **Responsive Design**: Perfect fit on all screen sizes with proper safe area handling
 - **Haptic Feedback**: Tactile responses for better user interaction (mobile only)
 
