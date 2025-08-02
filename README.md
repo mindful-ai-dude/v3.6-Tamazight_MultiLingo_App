@@ -1,4 +1,6 @@
-# Multi-Lingo App - Tamazight Edition
+# Multi-Lingo App - Tamazight Edition- Bridging languages, preserving culture, empowering emergency communication.
+
+*"In crisis, every word matters. In preservation, every language counts."*
 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 ## 🏆 Kaggle Google Deep Mind Hackathon
@@ -395,37 +397,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Google Fonts**: For the beautiful Inter font family
 - **Lucide Icons**: For the comprehensive icon library
 
-## 📞 Support
-
-For support, email support@tamazighttranslate.com or create an issue in the repository.
 
 ---
 
-**Multi-Lingo Tamazight Edition** - Bridging languages, preserving culture, empowering emergency communication.
 
-*"In crisis, every word matters. In preservation, every language counts."*
-
-🏆 **Kaggle Google Deep Mind Hackathon 2025 Entry**
-🌍 **Humanitarian AI for Emergency Communication**
-ⵜⴰⵎⴰⵣⵉⵖⵜ **Preserving Indigenous Languages Through Technology**
-
-## 📝 SpecStory Artifacts Directory Best Practices
-
-This project uses the SpecStory extension to capture AI coding session history and Cursor composer artifacts. To ensure best practices and a clean workflow, please follow these recommendations:
-
-### Version Control
-- By default, `.specstory` and `.specstory/cursor_rules_backups` are excluded from version control (see `.gitignore`).
-- If you wish to keep a history of your AI interactions, you may remove `.specstory` from `.gitignore`.
-- If you already version `.cursor/rules`, you can safely exclude `.specstory/cursor_rules_backups`.
-
-### Searching Your Codebase
-- To avoid cluttering search results with AI history, exclude `.specstory/*` in your code editor's search settings.
-  - In Cursor: Open Find in Files (Cmd/Ctrl + Shift + F), add `.specstory/*` to the "files to exclude" section.
-
-### SpecStory Auto-Save
-- Auto-save is enabled by default. You can control this in Cursor settings:
-  1. Open Cursor → Settings → VS Code Settings (Cmd/Ctrl + ,)
-  2. Search for "SpecStory"
-  3. Adjust the "Auto Save" setting as needed
-
-For more details, see `.specstory/.what-is-this.md`.
