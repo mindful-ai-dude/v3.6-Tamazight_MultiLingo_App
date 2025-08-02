@@ -14,10 +14,6 @@ A beautiful, production-ready mobile translation app built with Expo and React N
 ## About me, Gregory Kennedy the Apps Creator and Developer:   
 - I am former silicon valley engineer and award winning film maker who has had the great honor and pleasure to travel the world and have worked with Nobel Peace Prize Winners (Adolfo Perez Esquivel and Mairead Corrigan McGuire), Chimpanzee expert Dr. Jane Goodall in Africa and Europe and with Zen Master Thich Nhat Hanh in France, Germany and the USA.  I have been invited to and have spoken to audiences at the United Nations in Vienna, Austria and NYC, at Stanford University and at the Googleplex in Mountain View, CA.  
 
-
-![Gregory Kennedy and mom Valerie at Ben and Jerry's San Francisco Haight Ashbury April 2016](assets/images/Gregory%20Kennedy%20and%20mom%20Valerie%20at%20Ben%20and%20Jerry's%20San%20Francisco%20Haight%20Ashbury%20April%202016.jpg)
-Gregory and his mom at Ben & Jerry's San Francisco:
-
 LinkedIn: For more information about me, please visit my LinkedIn profile:
 https://www.linkedin.com/in/gregorykennedymindfuldude/
 
@@ -30,6 +26,9 @@ https://www.imdb.com/title/tt2771174/?ref_=mv_desc
 ## 🙏 Acknowledgments
 
 - **My Incredible Mom Valerie who died a few months ago**: Who taught me to care about other human beings, to explore the world and to treat everyone with respect and dignity 
+
+![Gregory Kennedy and mom Valerie at Ben and Jerry's San Francisco Haight Ashbury April 2016](assets/images/Gregory%20Kennedy%20and%20mom%20Valerie%20at%20Ben%20and%20Jerry's%20San%20Francisco%20Haight%20Ashbury%20April%202016.jpg)
+Gregory and his mom at Ben & Jerry's San Francisco:
 
 - **My Moroccan Teamates**: Omar (Moroccan Berber), Hamza and Ziyad for their dedication and hard work.  Thank you and appreciate you!
 
