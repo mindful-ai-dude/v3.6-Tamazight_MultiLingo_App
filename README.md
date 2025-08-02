@@ -1,6 +1,37 @@
-# Multi-Lingo App - Tamazight Edition- Bridging languages, preserving culture, empowering emergency communication.
+# Multi-Lingo App - Tamazight Edition 
+
+- Bridging languages, preserving culture, empowering emergency communication.
 
 *"In crisis, every word matters. In preservation, every language counts."*
+
+### 🌍 Mission: Bridging Communication Gaps in Crisis
+
+This app addresses a critical humanitarian need identified during the devastating 2023 Morocco earthquake, where rescue workers and officials struggled to communicate effectively with Moroccan Berber communities. Our solution provides instant, offline AI-powered translation to ensure no one is left behind during emergencies.
+
+A beautiful, production-ready mobile translation app built with Expo and React Native, featuring offline on device, and online AI translation capabilities for Tamazight (ⵜⴰⵎⴰⵣⵉⵖⵜ), pronounced "Tamazirt", the indigenous Berber language of Morocco. The app provides seamless multidirectional translation between Tamazight, Arabic, French, and English with specialized features for emergency situations, government/parliamentary use and as a general purpose multi-lingual translation tool.
+
+## About me, Gregory Kennedy the Apps Creator and Developer:   
+- I am former silicon valley engineer and award winning film maker who has had the great honor and pleasure to travel the world and have worked with Nobel Peace Prize Winners (Adolfo Perez Esquivel and Mairead Corrigan McGuire), Chimpanzee expert Dr. Jane Goodall in Africa and Europe and with Zen Master Thich Nhat Hanh in France, Germany and the USA.  I have been invited to and have spoken to audiences at the United Nations in Vienna, Austria and NYC, at Stanford University and at the Googleplex in Mountain View, CA.  
+
+- I am an American citizen whose family has lived in the USA for 400+ years, and whose ancestry is a reflection of American his and her-story consisting of two First Nation Native American tribes (Itakapa and Blackfoot), African, Irish, French and Mexican. 
+
+## 🙏 Acknowledgments
+
+- **My Incredible Mom Valerie who died a few months ago**: Who taught me to care about other human beings, to explore the world and to treat everyone with respect and dignity 
+
+- **My Moroccan Teamates**: Omar (Moroccan Berber), Hamza and Ziyad for their dedication and hard work.  Thank you and appreciate you!
+
+- **2023 Morocco Earthquake Victims**: This app honors those affected and aims to prevent future communication barriers
+
+- **Moroccan Berber Communities**: For preserving Tamazight language and culture through centuries
+
+- **The Kingdom of Morocco**: For passing laws to preserve and honor Tamazight language and culture, for making Tamazight an official language of Morocco and for making Tamazight compulsory in schools.
+
+- **Emergency Responders**: Who inspired this solution through their dedication during the crisis
+
+- **Kaggle and Google DeepMind**: For the Gemma-3n model and Kaggle for the hackathon opportunity
+
+- **Unsloth (Discord) Team and Dev Friends**: For their incredible support and guidance.
 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 ## 🏆 Kaggle Google Deep Mind Hackathon
@@ -13,7 +44,6 @@
 
 ### **Technical Achievements**
 - **Fine-tuning Dataset**: 100,000+ Arabic, English, French, and Tifinagh language pairs
-- **Model Conversion**: Gemma-3n 4b → TensorFlow Lite for mobile deployment
 - **Dual Architecture**: Online API + Offline on-device inference
 - **Emergency Optimization**: Specialized training for crisis communication scenarios
 - **Cultural Accuracy**: Moroccan Berber linguistic expertise integration
@@ -32,19 +62,6 @@
 - **Use Cases**: Earthquake relief, medical emergencies, legal proceedings
 - **Languages Preserved**: Tamazight variants (Tachelhit, Tarifit, Central Atlas)
 - **Emergency Phrases**: 50+ critical communication phrases pre-loaded
-
-### 🌍 Mission: Bridging Communication Gaps in Crisis
-
-This app addresses a critical humanitarian need identified during the devastating 2023 Morocco earthquake, where rescue workers and officials struggled to communicate effectively with Moroccan Berber communities. Our solution provides instant, offline AI-powered translation to ensure no one is left behind during emergencies.
-
-A beautiful, production-ready mobile translation app built with Expo and React Native, featuring offline AI translation capabilities for Tamazight (ⵜⴰⵎⴰⵣⵉⵖⵜ), pronounced "Tamazirt", the indigenous Berber language of Morocco. The app provides seamless multidirectional translation between Tamazight, Arabic, French, and English with specialized features for emergency situations and government/parliamentary use.
-
-## 🙏 Acknowledgments
-
-### **Humanitarian Mission**
-- **2023 Morocco Earthquake Victims**: This app honors those affected and aims to prevent future communication barriers
-- **Moroccan Berber Communities**: For preserving Tamazight language and culture through centuries
-- **Emergency Responders**: Who inspired this solution through their dedication during the crisis
 
 ## 🌟 Features
 
