@@ -14,14 +14,13 @@ A beautiful, production-ready mobile translation app built with Expo and React N
 ## About me, Gregory Kennedy the Apps Creator and Developer:   
 - I am former silicon valley engineer and award winning film maker who has had the great honor and pleasure to travel the world and have worked with Nobel Peace Prize Winners (Adolfo Perez Esquivel and Mairead Corrigan McGuire), Chimpanzee expert Dr. Jane Goodall in Africa and Europe and with Zen Master Thich Nhat Hanh in France, Germany and the USA.  I have been invited to and have spoken to audiences at the United Nations in Vienna, Austria and NYC, at Stanford University and at the Googleplex in Mountain View, CA.  
 
+- I am an American citizen whose family has lived in the USA for 400+ years, and whose ancestry is a reflection of American his and her-story consisting of two First Nation Native American tribes (Itakapa and Blackfoot), African, Irish, French and Mexican. 
+
 LinkedIn: For more information about me, please visit my LinkedIn profile:
 https://www.linkedin.com/in/gregorykennedymindfuldude/
 
-IMDB: Award Winning Film The 5 Powers
+IMDB: Award Winning Film The 5 Powers:
 https://www.imdb.com/title/tt2771174/?ref_=mv_desc
-
-
-- I am an American citizen whose family has lived in the USA for 400+ years, and whose ancestry is a reflection of American his and her-story consisting of two First Nation Native American tribes (Itakapa and Blackfoot), African, Irish, French and Mexican. 
 
 ## 🙏 Acknowledgments
 
