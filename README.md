@@ -1,6 +1,12 @@
 # Multi-Lingo App - Tamazight (Tamazirt) Edition 
 ![App Demo](assets/images/image-1-tamazight-eyes-intro1280x720px-no-bg.gif)
 
+Tamazight Multi-Lingo App Open-Source Github Code: 
+https://github.com/mindful-ai-dude/v3.6-Tamazight_MultiLingo_App
+
+Tamazight Multi-Lingo App Hugging Face Model Cards and Datasets: 
+https://huggingface.co/tamazightdev
+
 ## Bridging languages, preserving culture, empowering emergency communication.
 
 *"In crisis, every word matters. In preservation, every language counts."*
@@ -12,7 +18,7 @@ This app addresses a critical humanitarian need identified during the devastatin
 A beautiful, production-ready mobile translation app built with Expo and React Native, featuring offline on device, and online AI translation capabilities for Tamazight (ⵜⴰⵎⴰⵣⵉⵖⵜ), pronounced "Tamazirt", the indigenous Berber language of Morocco. The app provides seamless multidirectional translation between Tamazight, Arabic, French, and English with specialized features for emergency situations, government/parliamentary use and as a general purpose multi-lingual translation tool.
 
 ## About me, Gregory Kennedy the Apps Creator and Developer:   
-- I am former silicon valley engineer and award winning film maker who has had the great honor and pleasure to travel the world and have worked with Nobel Peace Prize Winners (Adolfo Perez Esquivel and Mairead Corrigan McGuire), Chimpanzee expert Dr. Jane Goodall in Africa and Europe and with Zen Master Thich Nhat Hanh in France, Germany and the USA.  I have been invited to and have spoken to audiences at the United Nations in Vienna, Austria and NYC, at Stanford University and at the Googleplex in Mountain View, CA.  
+- I am former silicon valley engineer and award winning film maker who has had the great honor and pleasure to travel the world and have worked with Nobel Peace Prize Winners (Adolfo Perez Esquivel and Mairead Corrigan McGuire), Chimpanzee expert Dr. Jane Goodall in Africa and Europe and with Zen Master Thich Nhat Hanh in France, Germany and the USA.  I have been invited to and have spoken to audiences at the United Nations in Vienna, Austria and NYC, and at Stanford University.  
 
 - I am an American citizen whose family has lived in the USA for 400+ years, and whose ancestry is a reflection of American his and her-story consisting of two First Nation Native American tribes (Itakapa and Blackfoot), African, Irish, French and Mexican. 
 
