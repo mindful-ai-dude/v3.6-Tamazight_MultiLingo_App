@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { databaseService, TranslationHistory } from '@/services/databaseService';
@@ -56,9 +56,11 @@ export const useTranslationHistory = (userId?: string) => {
     }
   };
 
-  // Convert Convex data to TranslationItem format
-  const formatConvexHistory = (convexData: any[]): TranslationItem[] => {
-    return convexData.map(item => ({
+  // Convert Convex data to TranslationItem format (memoized to prevent infinite re-renders)
+  const formatConvexHistory = useMemo(() => {
+    if (!convexUserHistory) return [];
+
+    return convexUserHistory.map(item => ({
       id: item._id,
       sourceText: item.sourceText,
       translatedText: item.translatedText,
@@ -69,7 +71,7 @@ export const useTranslationHistory = (userId?: string) => {
       method: item.translationMethod,
       confidence: item.confidence
     }));
-  };
+  }, [convexUserHistory]);
 
   const formatLanguageName = (lang: string): string => {
     switch (lang) {
@@ -134,20 +136,22 @@ export const useTranslationHistory = (userId?: string) => {
     loadLocalHistory();
   }, []);
 
-  // Get the appropriate history based on mode and tab
-  const getHistory = (tab: 'local' | 'community'): TranslationItem[] => {
-    if (tab === 'local') {
-      // For local tab, show user's personal history
-      if (mode === 'online' && convexUserHistory) {
-        return formatConvexHistory(convexUserHistory);
+  // Get the appropriate history based mode and tab (memoized)
+  const getHistory = useMemo(() => {
+    return (tab: 'local' | 'community'): TranslationItem[] => {
+      if (tab === 'local') {
+        // For local tab, show user's personal history
+        if (mode === 'online' && convexUserHistory) {
+          return formatConvexHistory;
+        } else {
+          return localHistory;
+        }
       } else {
-        return localHistory;
+        // Community tab will be handled by ConvexTranslationHistory component
+        return [];
       }
-    } else {
-      // Community tab will be handled by ConvexTranslationHistory component
-      return [];
-    }
-  };
+    };
+  }, [mode, convexUserHistory, formatConvexHistory, localHistory]);
 
   return {
     getHistory,
@@ -157,6 +161,6 @@ export const useTranslationHistory = (userId?: string) => {
     isLoading,
     error,
     localHistory,
-    convexUserHistory: convexUserHistory ? formatConvexHistory(convexUserHistory) : []
+    convexUserHistory: formatConvexHistory
   };
 };
