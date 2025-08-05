@@ -1,19 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
 import { GradientBackground } from '@/components/GradientBackground';
 import { GlassCard } from '@/components/GlassCard';
-import { Search, Star, Trash2, ArrowUpDown, Users, Database } from 'lucide-react-native';
+import { Search, Star, Trash2, ArrowUpDown, Users, Database, Heart, Wifi, WifiOff } from 'lucide-react-native';
 import ConvexTranslationHistory from '@/components/ConvexTranslationHistory';
-
-interface TranslationItem {
-  id: string;
-  sourceText: string;
-  translatedText: string;
-  fromLang: string;
-  toLang: string;
-  timestamp: Date;
-  isFavorite: boolean;
-}
+import { useTranslationHistory, TranslationItem } from '@/hooks/useTranslationHistory';
+import { useMode } from '@/app/context/ModeContext';
 
 const SAMPLE_HISTORY: TranslationItem[] = [
   {
@@ -48,27 +40,28 @@ const SAMPLE_HISTORY: TranslationItem[] = [
 export default function HistoryScreen() {
   const [searchText, setSearchText] = useState('');
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [history, setHistory] = useState(SAMPLE_HISTORY);
-  const [activeTab, setActiveTab] = useState<'local' | 'community'>('community');
+  const [activeTab, setActiveTab] = useState<'local' | 'community'>('local');
+
+  const { mode } = useMode();
+  const userId = 'user-' + Date.now(); // In real app, get from auth
+  const { getHistory, toggleFavorite, isLoading, error } = useTranslationHistory(userId);
+
+  // Get history based on current tab
+  const history = getHistory(activeTab);
 
   const filteredHistory = history.filter(item => {
-    const matchesSearch = searchText === '' || 
+    const matchesSearch = searchText === '' ||
       item.sourceText.toLowerCase().includes(searchText.toLowerCase()) ||
       item.translatedText.toLowerCase().includes(searchText.toLowerCase());
-    
+
     const matchesFavorites = !showFavoritesOnly || item.isFavorite;
-    
+
     return matchesSearch && matchesFavorites;
   });
 
-  const toggleFavorite = (id: string) => {
-    setHistory(prev => prev.map(item => 
-      item.id === id ? { ...item, isFavorite: !item.isFavorite } : item
-    ));
-  };
-
   const deleteItem = (id: string) => {
-    setHistory(prev => prev.filter(item => item.id !== id));
+    // For now, just show an alert - in real app, implement delete functionality
+    console.log('Delete item:', id);
   };
 
   const formatTimestamp = (timestamp: Date) => {
@@ -80,8 +73,24 @@ export default function HistoryScreen() {
       <GradientBackground>
         <SafeAreaView style={styles.safeArea}>
           <View style={styles.header}>
-            <Text style={styles.title}>Translation History</Text>
-            <Text style={styles.subtitle}>Your saved translations</Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>Translation History</Text>
+              <View style={styles.modeIndicator}>
+                {mode === 'online' ? (
+                  <Wifi size={14} color="#10B981" strokeWidth={2} />
+                ) : (
+                  <WifiOff size={14} color="rgba(255, 255, 255, 0.6)" strokeWidth={2} />
+                )}
+                <Text style={styles.modeText}>
+                  {mode === 'online' ? 'Online' : 'Offline'} Mode
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.subtitle}>
+              {activeTab === 'local'
+                ? 'Your personal translation history'
+                : 'Community verified translations'}
+            </Text>
           </View>
 
           {/* Tab Switcher */}
@@ -125,11 +134,24 @@ export default function HistoryScreen() {
             <ConvexTranslationHistory limit={50} />
           ) : (
             <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-              {filteredHistory.length === 0 ? (
+              {isLoading ? (
+                <GlassCard style={styles.emptyCard}>
+                  <Text style={styles.emptyText}>Loading history...</Text>
+                </GlassCard>
+              ) : error ? (
+                <GlassCard style={styles.emptyCard}>
+                  <Text style={styles.emptyText}>Error loading history</Text>
+                  <Text style={styles.emptySubtext}>{error}</Text>
+                </GlassCard>
+              ) : filteredHistory.length === 0 ? (
                 <GlassCard style={styles.emptyCard}>
                   <Text style={styles.emptyText}>No translations found</Text>
                   <Text style={styles.emptySubtext}>
-                    {showFavoritesOnly ? 'No favorite translations yet' : 'Start translating to build your history'}
+                    {showFavoritesOnly
+                      ? 'No favorite translations yet'
+                      : mode === 'online'
+                        ? 'Start translating to build your personal history'
+                        : 'Start translating to build your local history'}
                   </Text>
                 </GlassCard>
               ) : (
@@ -201,11 +223,32 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
   },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  modeIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    gap: 6,
+  },
+  modeText: {
+    fontSize: 12,
+    fontFamily: 'Inter-Medium',
+    color: '#FFFFFF',
+  },
   subtitle: {
     fontSize: 16,
     fontFamily: 'Inter-Regular',
     color: 'rgba(255, 255, 255, 0.8)',
     marginTop: 8,
+    textAlign: 'center',
   },
   tabContainer: {
     flexDirection: 'row',

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { Mic, Volume2, Copy, Heart } from 'lucide-react-native';
+import { Mic, Volume2, Copy, Heart, X } from 'lucide-react-native';
 import { GlassCard } from './GlassCard';
 import * as Speech from 'expo-speech';
 import { Platform } from 'react-native';
@@ -14,16 +14,18 @@ interface TranslationInputProps {
   isOutput?: boolean;
   onSpeech?: () => void;
   onFavorite?: () => void;
+  onClear?: () => void;
 }
 
-export function TranslationInput({ 
-  value, 
-  onChangeText, 
-  placeholder, 
-  language, 
+export function TranslationInput({
+  value,
+  onChangeText,
+  placeholder,
+  language,
   isOutput = false,
   onSpeech,
-  onFavorite 
+  onFavorite,
+  onClear
 }: TranslationInputProps) {
   const [isRecording, setIsRecording] = useState(false);
 
@@ -31,7 +33,7 @@ export function TranslationInput({
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
-    
+
     if (value) {
       Speech.speak(value, {
         language: getLanguageCode(language),
@@ -57,6 +59,13 @@ export function TranslationInput({
     onFavorite?.();
   };
 
+  const handleClear = () => {
+    if (Platform.OS !== 'web') {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
+    onClear?.();
+  };
+
   const getLanguageCode = (lang: string) => {
     switch (lang) {
       case 'Arabic': return 'ar';
@@ -72,7 +81,7 @@ export function TranslationInput({
         <Text style={styles.languageLabel}>{language}</Text>
         <View style={styles.actions}>
           {!isOutput && (
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.actionButton, isRecording && styles.recording]}
               onPress={() => setIsRecording(!isRecording)}
             >
@@ -87,6 +96,11 @@ export function TranslationInput({
               <TouchableOpacity style={styles.actionButton} onPress={handleCopy}>
                 <Copy size={20} color="#FFFFFF" strokeWidth={2} />
               </TouchableOpacity>
+              {!isOutput && onClear && (
+                <TouchableOpacity style={[styles.actionButton, styles.clearButton]} onPress={handleClear}>
+                  <X size={20} color="#FFFFFF" strokeWidth={2} />
+                </TouchableOpacity>
+              )}
               {isOutput && (
                 <TouchableOpacity style={styles.actionButton} onPress={handleFavorite}>
                   <Heart size={20} color="#FFFFFF" strokeWidth={2} />
@@ -139,6 +153,9 @@ const styles = StyleSheet.create({
   },
   recording: {
     backgroundColor: '#EF4444',
+  },
+  clearButton: {
+    backgroundColor: 'rgba(239, 68, 68, 0.8)',
   },
   input: {
     color: '#FFFFFF',

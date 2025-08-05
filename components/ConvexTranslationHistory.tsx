@@ -7,7 +7,7 @@ import { CheckCircle, XCircle, Clock, Users, Zap, Globe } from 'lucide-react-nat
 interface TranslationHistoryProps {
   sourceLanguage?: string;
   targetLanguage?: string;
-  context?: string;
+  context?: "emergency" | "government" | "general" | "cultural";
   limit?: number;
 }
 

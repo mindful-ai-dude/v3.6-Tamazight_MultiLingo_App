@@ -30,3 +30,6 @@ export const useMode = () => {
   }
   return context;
 };
+
+// Default export to satisfy Expo Router requirements
+export default ModeProvider;

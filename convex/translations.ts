@@ -3,37 +3,59 @@ import { v } from "convex/values";
 
 // Get recent translations with real-time updates
 export const getRecentTranslations = query({
-  args: { 
+  args: {
     limit: v.optional(v.number()),
-    context: v.optional(v.string()),
+    context: v.optional(v.union(v.literal("emergency"), v.literal("government"), v.literal("general"), v.literal("cultural"))),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("translations");
-    
+    let results;
+
     if (args.context) {
-      query = query.withIndex("by_context", (q) => q.eq("context", args.context));
+      results = await ctx.db
+        .query("translations")
+        .withIndex("by_context", (q) => q.eq("context", args.context!))
+        .order("desc")
+        .take(args.limit ?? 50);
+    } else {
+      results = await ctx.db
+        .query("translations")
+        .order("desc")
+        .take(args.limit ?? 50);
     }
-    
-    return await query
-      .order("desc")
-      .take(args.limit ?? 50);
+
+    return results;
   },
 });
 
 // Get translations by language pair
 export const getTranslationHistory = query({
-  args: { 
-    sourceLanguage: v.string(),
-    targetLanguage: v.string(),
+  args: {
+    sourceLanguage: v.union(v.literal("tamazight"), v.literal("arabic"), v.literal("french"), v.literal("english")),
+    targetLanguage: v.union(v.literal("tamazight"), v.literal("arabic"), v.literal("french"), v.literal("english")),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     return await ctx.db
       .query("translations")
-      .withIndex("by_source_language", (q) => 
+      .withIndex("by_source_language", (q) =>
         q.eq("sourceLanguage", args.sourceLanguage)
       )
       .filter((q) => q.eq(q.field("targetLanguage"), args.targetLanguage))
+      .order("desc")
+      .take(args.limit ?? 100);
+  },
+});
+
+// Get user's personal translation history
+export const getUserTranslationHistory = query({
+  args: {
+    userId: v.string(),
+    limit: v.optional(v.number()),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("translations")
+      .withIndex("by_user_id", (q) => q.eq("userId", args.userId))
       .order("desc")
       .take(args.limit ?? 100);
   },
@@ -55,11 +77,11 @@ export const getEmergencyTranslations = query({
 export const saveTranslation = mutation({
   args: {
     sourceText: v.string(),
-    sourceLanguage: v.string(),
-    targetLanguage: v.string(),
+    sourceLanguage: v.union(v.literal("tamazight"), v.literal("arabic"), v.literal("french"), v.literal("english")),
+    targetLanguage: v.union(v.literal("tamazight"), v.literal("arabic"), v.literal("french"), v.literal("english")),
     translatedText: v.string(),
-    translationMethod: v.string(),
-    context: v.optional(v.string()),
+    translationMethod: v.union(v.literal("gemini"), v.literal("tflite"), v.literal("user"), v.literal("community")),
+    context: v.optional(v.union(v.literal("emergency"), v.literal("government"), v.literal("general"), v.literal("cultural"))),
     userId: v.optional(v.string()),
     confidence: v.optional(v.number()),
     region: v.optional(v.string()),
@@ -69,11 +91,11 @@ export const saveTranslation = mutation({
   handler: async (ctx, args) => {
     const translationId = await ctx.db.insert("translations", {
       sourceText: args.sourceText,
-      sourceLanguage: args.sourceLanguage as any,
-      targetLanguage: args.targetLanguage as any,
+      sourceLanguage: args.sourceLanguage,
+      targetLanguage: args.targetLanguage,
       translatedText: args.translatedText,
-      translationMethod: args.translationMethod as any,
-      context: args.context as any,
+      translationMethod: args.translationMethod,
+      context: args.context,
       userId: args.userId,
       timestamp: Date.now(),
       isVerified: false,
@@ -99,7 +121,7 @@ export const verifyTranslation = mutation({
     userId: v.string(),
     isCorrect: v.boolean(),
     suggestedImprovement: v.optional(v.string()),
-    expertise: v.optional(v.string()),
+    expertise: v.optional(v.union(v.literal("native_speaker"), v.literal("linguist"), v.literal("emergency_responder"), v.literal("community_member"))),
   },
   handler: async (ctx, args) => {
     // Add verification record
@@ -108,7 +130,7 @@ export const verifyTranslation = mutation({
       userId: args.userId,
       isCorrect: args.isCorrect,
       suggestedImprovement: args.suggestedImprovement,
-      expertise: args.expertise as any,
+      expertise: args.expertise,
       timestamp: Date.now(),
     });
 
@@ -133,22 +155,25 @@ export const verifyTranslation = mutation({
 export const searchTranslations = query({
   args: {
     searchText: v.string(),
-    language: v.optional(v.string()),
+    language: v.optional(v.union(v.literal("tamazight"), v.literal("arabic"), v.literal("french"), v.literal("english"))),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("translations");
-    
+    let results;
+
     if (args.language) {
-      query = query.withIndex("by_source_language", (q) => 
-        q.eq("sourceLanguage", args.language)
-      );
+      results = await ctx.db
+        .query("translations")
+        .withIndex("by_source_language", (q) =>
+          q.eq("sourceLanguage", args.language!)
+        )
+        .take(args.limit ?? 50);
+    } else {
+      results = await ctx.db.query("translations").take(args.limit ?? 50);
     }
-    
-    const results = await query.take(args.limit ?? 50);
-    
+
     // Simple text search (in production, you'd use Convex's search features)
-    return results.filter(translation => 
+    return results.filter(translation =>
       translation.sourceText.toLowerCase().includes(args.searchText.toLowerCase()) ||
       translation.translatedText.toLowerCase().includes(args.searchText.toLowerCase())
     );

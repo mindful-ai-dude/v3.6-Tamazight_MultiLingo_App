@@ -46,7 +46,8 @@ export default defineSchema({
     .index("by_timestamp", ["timestamp"])
     .index("by_emergency", ["isEmergency"])
     .index("by_region", ["region"])
-    .index("by_verification", ["isVerified"]),
+    .index("by_verification", ["isVerified"])
+    .index("by_user_id", ["userId"]),
 
   // Emergency phrases for quick access during crises
   emergencyPhrases: defineTable({

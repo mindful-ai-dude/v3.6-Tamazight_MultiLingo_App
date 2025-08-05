@@ -255,24 +255,8 @@ export const seedSampleTranslations = mutation({
 export const seedAllData = mutation({
   args: {},
   handler: async (ctx) => {
-    const results = [];
-    
-    // Seed emergency phrases
-    const emergencyResult = await ctx.runMutation("seedData:seedEmergencyPhrases", {});
-    results.push(emergencyResult);
-    
-    // Seed cultural context
-    const culturalResult = await ctx.runMutation("seedData:seedCulturalContext", {});
-    results.push(culturalResult);
-    
-    // Seed sample translations
-    const translationResult = await ctx.runMutation("seedData:seedSampleTranslations", {});
-    results.push(translationResult);
-    
     return {
-      message: "🚀 All seed data inserted successfully!",
-      results,
-      totalItems: results.reduce((sum, r) => sum + r.count, 0),
+      message: "🚀 Please run individual seed functions: seedEmergencyPhrases, seedCulturalContext, seedSampleTranslations",
       timestamp: Date.now()
     };
   },

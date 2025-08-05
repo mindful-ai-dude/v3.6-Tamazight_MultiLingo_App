@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { GradientBackground } from '@/components/GradientBackground';
 import { GlassCard } from '@/components/GlassCard';
-import { Building2, FileText, Users, Scale, Volume2, BookOpen } from 'lucide-react-native';
+import { Building2, FileText, Users, Scale, Volume2, BookOpen, Music } from 'lucide-react-native';
 import * as Speech from 'expo-speech';
 import { Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { hasAudioForLanguage, getAudioFile } from '@/constants/AudioFiles';
 
 interface GovernmentPhrase {
   id: string;
@@ -79,16 +80,46 @@ const CATEGORIES = ['All', 'Parliament', 'Legal', 'Administrative', 'Rights', 'E
 export default function GovernmentScreen() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedLanguage, setSelectedLanguage] = useState('english');
+  const [playingPhraseId, setPlayingPhraseId] = useState<string | null>(null);
 
   const filteredPhrases = GOVERNMENT_PHRASES.filter(phrase => 
     selectedCategory === 'All' || phrase.category === selectedCategory
   );
 
-  const handleSpeak = (phrase: GovernmentPhrase) => {
+  const handleSpeak = async (phrase: GovernmentPhrase) => {
     if (Platform.OS !== 'web') {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     }
 
+    setPlayingPhraseId(phrase.id);
+
+    // Check if we have native audio for the selected language
+    const hasNativeAudio = hasAudioForLanguage(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
+
+    if (hasNativeAudio) {
+      const audioFile = getAudioFile(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
+      if (audioFile) {
+        try {
+          if (Platform.OS === 'web') {
+            // For web, create audio from the require() result
+            const audio = new Audio(audioFile);
+            audio.play();
+            setTimeout(() => setPlayingPhraseId(null), 3000);
+          } else {
+            // For mobile, use expo-av with the required audio file
+            const { Audio } = require('expo-av');
+            const { sound } = await Audio.Sound.createAsync(audioFile);
+            await sound.playAsync();
+            setTimeout(() => setPlayingPhraseId(null), 3000);
+          }
+          return;
+        } catch (error) {
+          console.error(`Error playing native ${selectedLanguage} audio, falling back to TTS:`, error);
+        }
+      }
+    }
+
+    // Fallback to text-to-speech
     let textToSpeak = '';
     let languageCode = 'en';
 
@@ -114,6 +145,8 @@ export default function GovernmentScreen() {
       language: languageCode,
       pitch: 1.0,
       rate: 0.7,
+      onDone: () => setPlayingPhraseId(null),
+      onError: () => setPlayingPhraseId(null),
     });
   };
 
@@ -124,6 +157,10 @@ export default function GovernmentScreen() {
       case 'french': return phrase.french;
       default: return phrase.english;
     }
+  };
+
+  const hasNativeAudio = (phrase: GovernmentPhrase) => {
+    return hasAudioForLanguage(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
   };
 
   const getCategoryIcon = (category: string) => {
@@ -214,9 +251,17 @@ export default function GovernmentScreen() {
                     <View style={styles.categoryBadge}>
                       {getCategoryIcon(phrase.category)}
                       <Text style={styles.categoryLabel}>{phrase.category}</Text>
+                      {hasNativeAudio(phrase) && (
+                        <View style={styles.audioIndicator}>
+                          <Music size={14} color="#10B981" strokeWidth={2} />
+                        </View>
+                      )}
                     </View>
-                    <TouchableOpacity 
-                      style={styles.speakButton}
+                    <TouchableOpacity
+                      style={[
+                        styles.speakButton,
+                        playingPhraseId === phrase.id && styles.speakButtonActive
+                      ]}
                       onPress={() => handleSpeak(phrase)}
                     >
                       <Volume2 size={20} color="#FFFFFF" strokeWidth={2} />
@@ -233,6 +278,15 @@ export default function GovernmentScreen() {
                   <Text style={styles.contextText}>
                     Context: {phrase.context}
                   </Text>
+                  {hasNativeAudio(phrase) && (
+                    <Text style={styles.audioNote}>
+                      🎵 Professional {
+                        selectedLanguage === 'tamazight' ? 'Tamazight' :
+                        selectedLanguage === 'french' ? 'French' :
+                        selectedLanguage === 'arabic' ? 'Arabic' : 'English'
+                      } audio available
+                    </Text>
+                  )}
                 </GlassCard>
               </TouchableOpacity>
             ))}
@@ -399,5 +453,21 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Inter-Regular',
     fontStyle: 'italic',
+  },
+  audioIndicator: {
+    marginLeft: 8,
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderRadius: 8,
+    padding: 2,
+  },
+  speakButtonActive: {
+    backgroundColor: 'rgba(245, 158, 11, 0.8)',
+  },
+  audioNote: {
+    color: '#10B981',
+    fontSize: 11,
+    fontFamily: 'Inter-Medium',
+    marginTop: 4,
+    textAlign: 'center',
   },
 });

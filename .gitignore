@@ -31,12 +31,11 @@ yarn-error.*
 .env*.local
 .env
 
-# documentation folder
-documentation/
-
 # typescript
 *.tsbuildinfo
 
-# SpecStory AI artifacts (see README for details)
-.specstory
-.specstory/cursor_rules_backups
+# jupyter notebooks and docs
+docs-3n-finetuning/
+**/*.ipynb
+**/*.ipynb.txt
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import { GradientBackground } from '@/components/GradientBackground';
 import { TranslationInput } from '@/components/TranslationInput';
@@ -12,6 +12,7 @@ import { offlineAIService } from '@/services/offlineAIService';
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useConvexTranslation } from '@/services/convexTranslationService';
+import { useTranslationHistory } from '@/hooks/useTranslationHistory';
 
 export default function TranslateScreen() {
   const [inputText, setInputText] = useState('');
@@ -32,6 +33,10 @@ export default function TranslateScreen() {
     recentTranslations,
     isConnected
   } = useConvexTranslation();
+
+  // Translation history management - stable userId to prevent re-renders
+  const userId = useMemo(() => 'user-' + Date.now(), []); // In real app, get from auth
+  const { saveTranslation } = useTranslationHistory(userId);
 
   // Helper function to convert display language to API format
   const getLanguageCode = (displayLanguage: string): string => {
@@ -69,6 +74,18 @@ export default function TranslateScreen() {
 
       setOutputText(result.translatedText);
 
+      // Save translation to history
+      await saveTranslation({
+        sourceText: inputText,
+        translatedText: result.translatedText,
+        fromLang: fromLanguage,
+        toLang: toLanguage,
+        timestamp: new Date(),
+        isFavorite: false,
+        method: result.method,
+        confidence: result.confidence
+      });
+
       // Show translation method info in console
       const methodInfo = result.method === 'community' ?
         '✅ Community Verified' :
@@ -81,9 +98,9 @@ export default function TranslateScreen() {
       console.log(`Translation: ${methodInfo} (${Math.round((result.confidence || 0) * 100)}% confidence)`);
 
     } catch (error) {
-      console.error('Enhanced translation failed, using fallback:', error);
+      console.error('Enhanced translation failed, using alternative methods:', error);
 
-      // Fallback to original translation methods
+      // Alternative translation methods
       if (mode === 'online') {
         try {
           if (!geminiService.isConfigured()) {
@@ -103,6 +120,17 @@ export default function TranslateScreen() {
           );
 
           setOutputText(translation);
+
+          // Save translation to history
+          await saveTranslation({
+            sourceText: inputText,
+            translatedText: translation,
+            fromLang: fromLanguage,
+            toLang: toLanguage,
+            timestamp: new Date(),
+            isFavorite: false,
+            method: 'gemini'
+          });
         } catch (geminiError) {
           console.error('Gemini API Translation Error:', geminiError);
           setOutputText('Error translating online. Please check your internet connection and API key, then try again.');
@@ -121,18 +149,22 @@ export default function TranslateScreen() {
           );
 
           setOutputText(result.translatedText);
+
+          // Save offline translation to history
+          await saveTranslation({
+            sourceText: inputText,
+            translatedText: result.translatedText,
+            fromLang: fromLanguage,
+            toLang: toLanguage,
+            timestamp: new Date(),
+            isFavorite: false,
+            method: 'tflite'
+          });
         } catch (offlineError) {
           console.error('Offline AI Translation Error:', offlineError);
-          // Fallback to simple mock translation
-          if (fromLanguage === 'English' && toLanguage.includes('Tamazight')) {
-            setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-          } else if (fromLanguage.includes('Tamazight') && toLanguage === 'English') {
-            setOutputText('Hello, peace be with you');
-          } else if (fromLanguage.includes('Arabic') && toLanguage.includes('Tamazight')) {
-            setOutputText('ⴰⵣⵓⵍ ⴰⴼⵍⵍⴰⵙ');
-          } else {
-            setOutputText(`[Offline Translation from ${fromLanguage} to ${toLanguage}]: ${inputText}`);
-          }
+          // Show professional error message - no mock data
+          const errorMessage = `Translation not available. Please import the dataset first or check your connection.`;
+          setOutputText(errorMessage);
         }
       }
     } finally {
@@ -151,7 +183,7 @@ export default function TranslateScreen() {
           <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
             <View style={styles.header}>
               <Image
-                source={require('../../assets/images/image-app-header-tamazight-500x500.png')}
+                source={require('../../assets/images/image-1-tamazight-eyes-intro500x282px-no-bg.gif')}
                 style={styles.headerImage}
                 resizeMode="contain"
               />
@@ -171,8 +203,8 @@ export default function TranslateScreen() {
                 )}
               </View>
 
-              {/* Convex Connection Status */}
-              {convexTest && (
+              {/* Convex Connection Status - Only show in online mode */}
+              {mode === 'online' && convexTest && (
                 <View style={styles.convexStatus}>
                   <Text style={styles.convexText}>
                     🚀 Real-time DB Connected
@@ -199,6 +231,10 @@ export default function TranslateScreen() {
               onChangeText={setInputText}
               placeholder={`Enter text in ${fromLanguage}...`}
               language={fromLanguage}
+              onClear={() => {
+                setInputText('');
+                setOutputText('');
+              }}
             />
 
             <View style={styles.controls}>

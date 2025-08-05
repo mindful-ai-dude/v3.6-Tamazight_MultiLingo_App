@@ -77,15 +77,14 @@ export const useConvexTranslation = () => {
         if (existingTranslation) {
           // Use community-verified translation
           await databaseService.saveTranslation({
-            sourceText,
-            sourceLanguage,
-            targetLanguage,
-            translatedText: existingTranslation.translatedText,
-            translationMethod: 'community',
-            context,
-            confidence: 1.0,
-            isEmergency,
-            convexId: existingTranslation._id
+            inputText: sourceText,
+            outputText: existingTranslation.translatedText,
+            fromLanguage: sourceLanguage,
+            toLanguage: targetLanguage,
+            timestamp: Date.now(),
+            isFavorite: false,
+            translationMode: 'online',
+            context: context === 'cultural' ? 'general' : context
           });
 
           return {
@@ -98,27 +97,14 @@ export const useConvexTranslation = () => {
         }
       }
 
-      // 2. Check local cache for recent translations
-      const cachedTranslation = await databaseService.getCachedTranslation(
-        sourceText, sourceLanguage, targetLanguage
-      );
-      
-      if (cachedTranslation && !isEmergency) {
-        return {
-          translatedText: cachedTranslation.translatedText,
-          confidence: cachedTranslation.confidence,
-          method: 'cached',
-          isFromCache: true,
-          localId: cachedTranslation.id
-        };
-      }
+      // 2. TODO: Check local cache for recent translations
 
       // 3. Try online translation (Gemini API)
       const networkState = await NetInfo.fetch();
       if (networkState.isConnected) {
         try {
           const geminiResult = await geminiService.translateText(
-            sourceText, sourceLanguage, targetLanguage, context
+            sourceText, sourceLanguage, targetLanguage, context === 'cultural' ? 'general' : context
           );
           
           translatedText = geminiResult;
@@ -128,11 +114,11 @@ export const useConvexTranslation = () => {
           // Save to Convex for real-time sharing
           const convexId = await saveTranslation({
             sourceText,
-            sourceLanguage,
-            targetLanguage,
+            sourceLanguage: sourceLanguage as "tamazight" | "arabic" | "french" | "english",
+            targetLanguage: targetLanguage as "tamazight" | "arabic" | "french" | "english",
             translatedText,
             translationMethod: 'gemini',
-            context,
+            context: context as "emergency" | "government" | "general" | "cultural",
             userId,
             confidence,
             isEmergency
@@ -140,15 +126,14 @@ export const useConvexTranslation = () => {
 
           // Cache locally
           const localId = await databaseService.saveTranslation({
-            sourceText,
-            sourceLanguage,
-            targetLanguage,
-            translatedText,
-            translationMethod: 'gemini',
-            context,
-            confidence,
-            isEmergency,
-            convexId: convexId.id
+            inputText: sourceText,
+            outputText: translatedText,
+            fromLanguage: sourceLanguage,
+            toLanguage: targetLanguage,
+            timestamp: Date.now(),
+            isFavorite: false,
+            translationMode: 'online',
+            context: context === 'cultural' ? 'general' : context
           });
 
           return {
@@ -156,62 +141,47 @@ export const useConvexTranslation = () => {
             confidence,
             method: 'gemini',
             convexId: convexId.id,
-            localId
+            localId: localId.toString()
           };
 
         } catch (geminiError) {
-          console.warn('Gemini translation failed, falling back to offline:', geminiError);
+          console.warn('Gemini translation failed, using offline dataset:', geminiError);
         }
       }
 
-      // 4. Fallback to offline TFLite translation
+      // 4. Use offline dataset translation
       const offlineResult = await offlineAIService.translateText(
-        sourceText, sourceLanguage, targetLanguage
+        sourceText, sourceLanguage, targetLanguage, context === 'cultural' ? 'general' : context
       );
-      
-      translatedText = offlineResult;
-      confidence = 0.85; // Good confidence for TFLite
+
+      translatedText = offlineResult.translatedText;
+      confidence = offlineResult.confidence;
       method = 'tflite';
 
       // Save locally and queue for Convex sync
       const localId = await databaseService.saveTranslation({
-        sourceText,
-        sourceLanguage,
-        targetLanguage,
-        translatedText,
-        translationMethod: 'tflite',
-        context,
-        confidence,
-        isEmergency
+        inputText: sourceText,
+        outputText: translatedText,
+        fromLanguage: sourceLanguage,
+        toLanguage: targetLanguage,
+        timestamp: Date.now(),
+        isFavorite: false,
+        translationMode: 'offline',
+        context: context === 'cultural' ? 'general' : context
       });
 
-      // Queue for sync when connectivity returns
-      await databaseService.queueForSync({
-        action: 'create_translation',
-        data: {
-          sourceText,
-          sourceLanguage,
-          targetLanguage,
-          translatedText,
-          translationMethod: 'tflite',
-          context,
-          userId,
-          confidence,
-          isEmergency
-        },
-        priority: isEmergency ? 10 : 5
-      });
+      // TODO: Queue for sync when connectivity returns
 
       return {
         translatedText,
         confidence,
         method: 'tflite',
-        localId
+        localId: localId.toString()
       };
 
     } catch (error) {
       console.error('Translation failed:', error);
-      throw new Error(`Translation failed: ${error.message}`);
+      throw new Error(`Translation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -295,19 +265,7 @@ export const useConvexTranslation = () => {
     } catch (error) {
       console.error('Emergency broadcast failed:', error);
       
-      // Fallback: save locally for sync later
-      await databaseService.queueForSync({
-        action: 'emergency_broadcast',
-        data: {
-          message,
-          sourceLanguage,
-          location,
-          urgencyLevel,
-          category: 'emergency',
-          broadcasterId
-        },
-        priority: 10 // Highest priority
-      });
+      // TODO: Fallback: save locally for sync later
 
       throw error;
     }

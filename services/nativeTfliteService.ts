@@ -140,7 +140,7 @@ export class NativeTfliteService {
       }
     } catch (error) {
       console.error('Native translation error:', error);
-      throw new Error(`Native translation failed: ${error.message}`);
+      throw new Error(`Native translation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   }
 

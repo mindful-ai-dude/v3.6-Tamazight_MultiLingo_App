@@ -46,6 +46,21 @@ VS Code's Java extension gets confused and shows errors. These settings tell VS 
 - Better code completion and formatting
 - Optimized for mobile app development
 
+## 🔧 **Troubleshooting**
+
+### Clear TypeScript Cache Issues
+If you see persistent TypeScript errors for files that don't exist (like `docs-3n-finetuning`):
+
+1. **Command Palette** (`Cmd+Shift+P` / `Ctrl+Shift+P`)
+2. Run: `TypeScript: Restart TS Server`
+3. Or run: `Developer: Reload Window`
+
+### Clear All Caches
+```bash
+rm -rf .expo node_modules/.cache .metro-cache
+npm run dev
+```
+
 ## 🔧 **Customization**
 
 Feel free to modify `settings.json` to match your preferences while keeping the Java exclusions for error-free development.

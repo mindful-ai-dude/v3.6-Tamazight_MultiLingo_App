@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Animated } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Animated, ScrollView } from 'react-native';
 import { GradientBackground } from '@/components/GradientBackground';
 import { GlassCard } from '@/components/GlassCard';
-import { Settings, Wifi, WifiOff, Zap, Shield, Globe } from 'lucide-react-native';
+import { DatasetImporter } from '@/components/DatasetImporter';
+import { Settings, Wifi, WifiOff, Zap, Shield, Globe, Database } from 'lucide-react-native';
 import { useMode } from '../context/ModeContext';
 
 interface CustomToggleProps {
@@ -61,6 +62,8 @@ export default function SettingsScreen() {
             </View>
             <Text style={styles.subtitle}>Configure your translation preferences</Text>
           </View>
+
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
 
           <GlassCard style={styles.settingsCard}>
             <TouchableOpacity 
@@ -130,6 +133,8 @@ export default function SettingsScreen() {
             </View>
           </GlassCard>
 
+          <DatasetImporter />
+
           <GlassCard style={styles.aboutCard}>
             <View style={styles.aboutHeader}>
               <Globe size={20} color="#3B82F6" strokeWidth={2} />
@@ -141,6 +146,7 @@ export default function SettingsScreen() {
               for Moroccan Amazigh variants to ensure cultural and linguistic accuracy.
             </Text>
           </GlassCard>
+          </ScrollView>
         </SafeAreaView>
       </GradientBackground>
     </View>
@@ -154,6 +160,9 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     paddingBottom: 105, // Account for tab bar height (85px) + extra padding
+  },
+  scrollView: {
+    flex: 1,
   },
   header: {
     alignItems: 'center',

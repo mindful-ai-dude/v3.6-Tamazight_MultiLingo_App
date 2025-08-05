@@ -7,7 +7,7 @@ import * as Speech from 'expo-speech';
 import { Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { useAudioPlayer } from '@/components/AudioPlayer';
-import { getTamazightAudioUrl, hasTamazightAudio } from '@/constants/AudioFiles';
+import { getTamazightAudioUrl, hasTamazightAudio, getFrenchAudioFile, hasFrenchAudio, hasAudioForLanguage, getAudioFile } from '@/constants/AudioFiles';
 
 interface EmergencyPhrase {
   id: string;
@@ -94,25 +94,28 @@ export default function EmergencyScreen() {
 
     setPlayingPhraseId(phrase.id);
 
-    // If Tamazight is selected and we have native audio, use it
-    if (selectedLanguage === 'tamazight' && hasTamazightAudio(phrase.english)) {
-      const audioUrl = getTamazightAudioUrl(phrase.english);
-      if (audioUrl) {
+    // Check if we have native audio for the selected language
+    const hasNativeAudio = hasAudioForLanguage(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
+
+    if (hasNativeAudio) {
+      const audioFile = getAudioFile(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
+      if (audioFile) {
         try {
           if (Platform.OS === 'web') {
-            const audio = new Audio(audioUrl);
+            // For web, create audio from the require() result
+            const audio = new Audio(audioFile);
             audio.play();
-            // Reset playing state after audio duration (estimated 3 seconds)
             setTimeout(() => setPlayingPhraseId(null), 3000);
           } else {
-            // For mobile, we would use the AudioPlayer component
-            // This is a simplified version for demonstration
-            console.log('Playing native Tamazight audio:', audioUrl);
+            // For mobile, use expo-av with the required audio file
+            const { Audio } = require('expo-av');
+            const { sound } = await Audio.Sound.createAsync(audioFile);
+            await sound.playAsync();
             setTimeout(() => setPlayingPhraseId(null), 3000);
           }
           return;
         } catch (error) {
-          console.error('Error playing native audio, falling back to TTS:', error);
+          console.error(`Error playing native ${selectedLanguage} audio, falling back to TTS:`, error);
         }
       }
     }
@@ -166,7 +169,7 @@ export default function EmergencyScreen() {
   };
 
   const hasNativeAudio = (phrase: EmergencyPhrase) => {
-    return selectedLanguage === 'tamazight' && hasTamazightAudio(phrase.english);
+    return hasAudioForLanguage(phrase.english, selectedLanguage as 'tamazight' | 'french' | 'arabic' | 'english');
   };
 
   return (
@@ -273,7 +276,11 @@ export default function EmergencyScreen() {
                   )}
                   {hasNativeAudio(phrase) && (
                     <Text style={styles.audioNote}>
-                      🎵 Native Tamazight audio available
+                      🎵 Professional {
+                        selectedLanguage === 'tamazight' ? 'Tamazight' :
+                        selectedLanguage === 'french' ? 'French' :
+                        selectedLanguage === 'arabic' ? 'Arabic' : 'English'
+                      } audio available
                     </Text>
                   )}
                 </GlassCard>
@@ -443,9 +450,19 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   audioNote: {
-    color: 'rgba(16, 185, 129, 0.9)',
-    fontSize: 12,
+    color: '#10B981',
+    fontSize: 11,
     fontFamily: 'Inter-Medium',
-    fontStyle: 'italic',
+    marginTop: 4,
+    textAlign: 'center',
+  },
+  audioIndicator: {
+    marginLeft: 8,
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderRadius: 8,
+    padding: 2,
+  },
+  speakButtonActive: {
+    backgroundColor: 'rgba(245, 158, 11, 0.8)',
   },
 });

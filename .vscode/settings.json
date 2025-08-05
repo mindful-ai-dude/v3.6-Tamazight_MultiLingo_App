@@ -18,7 +18,10 @@
     "**/node_modules": true,
     "**/.git": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
+    "**/Thumbs.db": true,
+    "**/docs-3n-finetuning": true,
+    "**/*.ipynb": true,
+    "**/*.ipynb.txt": true
   },
   "search.exclude": {
     "**/node_modules": true,
@@ -26,10 +29,18 @@
     "**/.expo-shared": true,
     "**/ios/build": true,
     "**/android/build": true,
-    "**/android/.gradle": true
+    "**/android/.gradle": true,
+    "**/docs-3n-finetuning": true,
+    "**/*.ipynb": true,
+    "**/*.ipynb.txt": true
   },
   "typescript.preferences.importModuleSpecifier": "relative",
   "typescript.suggest.autoImports": true,
+  "typescript.exclude": [
+    "**/docs-3n-finetuning/**",
+    "**/*.ipynb",
+    "**/*.ipynb.txt"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },

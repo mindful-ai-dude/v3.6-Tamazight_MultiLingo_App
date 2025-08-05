@@ -7,8 +7,8 @@ const config = getDefaultConfig(__dirname);
 // Add TypeScript extensions to the resolver
 config.resolver.sourceExts = ['jsx', 'js', 'ts', 'tsx', 'json', 'mjs'];
 
-// Add .tflite files as assets for AI model support
-config.resolver.assetExts.push('tflite', 'task');
+// Add .tflite files as assets for AI model support, .wasm for expo-sqlite web support, and audio files
+config.resolver.assetExts.push('tflite', 'task', 'wasm', 'mp3', 'MP3', 'wav', 'aac', 'm4a');
 
 // Add resolver configuration for Google Generative AI
 config.resolver.alias = {

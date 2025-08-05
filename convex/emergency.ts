@@ -3,27 +3,28 @@ import { v } from "convex/values";
 
 // Get emergency phrases by category and language
 export const getEmergencyPhrases = query({
-  args: { 
+  args: {
     language: v.string(),
-    category: v.optional(v.string()),
+    category: v.optional(v.union(v.literal("medical"), v.literal("rescue"), v.literal("location"), v.literal("safety"), v.literal("communication"), v.literal("earthquake"), v.literal("flood"), v.literal("fire"))),
     limit: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    let query = ctx.db.query("emergencyPhrases");
-    
+    let phrases;
+
     if (args.category) {
-      query = query.withIndex("by_category", (q) => q.eq("category", args.category));
-    } else {
-      query = query.withIndex("by_language", (q) => q.eq("language", args.language));
-    }
-    
-    const phrases = await query.take(args.limit ?? 20);
-    
-    // Filter by language if category was specified
-    if (args.category) {
+      phrases = await ctx.db
+        .query("emergencyPhrases")
+        .withIndex("by_category", (q) => q.eq("category", args.category!))
+        .take(args.limit ?? 20);
+      // Filter by language if category was specified
       return phrases.filter(phrase => phrase.language === args.language);
+    } else {
+      phrases = await ctx.db
+        .query("emergencyPhrases")
+        .withIndex("by_language", (q) => q.eq("language", args.language))
+        .take(args.limit ?? 20);
     }
-    
+
     return phrases.sort((a, b) => b.priority - a.priority);
   },
 });
@@ -110,7 +111,7 @@ export const getActiveEmergencyBroadcasts = query({
     }
     
     if (args.urgencyLevel) {
-      filtered = filtered.filter(b => b.urgencyLevel >= args.urgencyLevel);
+      filtered = filtered.filter(b => b.urgencyLevel >= args.urgencyLevel!);
     }
     
     // Filter out expired broadcasts
