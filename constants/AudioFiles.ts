@@ -67,6 +67,8 @@ export const ENGLISH_AUDIO_FILES = {
   'I need water': require('../assets/audio/english-i need water.MP3'),
 
   // Government/Official phrases (matching exact filenames)
+  'I need an interpreter': require('../assets/audio/english-i need an interpreter.MP3'),
+  'I request to speak in Tamazight': require('../assets/audio/english-i request to speak in Tamazight.MP3'),
   'Can this form be provided in Tamazight?': require('../assets/audio/english-can this form be provided in tamazight.MP3'),
   'What are my linguistic rights?': require('../assets/audio/english-what are my linguistic rights.MP3'),
   'Where can I get official documents translated?': require('../assets/audio/english-where can i get official documents translated.MP3'),
